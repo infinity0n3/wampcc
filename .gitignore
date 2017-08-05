@@ -69,5 +69,7 @@ Makefile.in
 
 # Ignore folders of external code that has to be downloaded into source tree
 
+# build directory
+/build
 
 
