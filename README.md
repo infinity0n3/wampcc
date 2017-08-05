@@ -192,27 +192,16 @@ git clone https://github.com/darrenjs/wampcc.git
 
 This will fetch the source files directly from github and place them in a directory named `wampcc/`.
 
-Additional source files are contained in a separate project named **jalson**, which provides the *wampcc* json types.  To obtain these sources run the `fetch_prerequisites.sh` script:
-
-```bash
-cd wampcc/
-./fetch_prerequisites.sh
-```
-
 Assuming no download problems the additional files can be found in the `jalson/` sub-directory.
 
 **Source configuration**
 
-If building from the git sources the `configure` script must be first generated.  An included helped script can do this:
+The source code is now ready to be configured.  This is done by running the `cmake` script, and passing it the locations of *libuv* and *jansson*, and also the location where *wampcc* should finally be installed.
 
 ```bash
-./autotools_setup.sh
-```
-
-The source code is now ready to be configured.  This is done by running the `configure` script, and passing it the locations of *libuv* and *jansson*, and also the location where *wampcc* should finally be installed.
-
-```bash
-./configure  --prefix=/var/tmp/wampcc_install  --with-libuv=/opt/libuv-1.10.2 --with-jansson=/opt/jansson-2.10
+mkdir build
+cd build
+cmake ..  -DCMAKE_INSTALL_PREFIX=/var/tmp/wampcc_install  -DLIBUV_DIR=/opt/libuv-1.10.2 ---DJANSSON_DIR=/opt/jansson-2.10
 ```
 
 Note that the locations of *libuv* and *jansson* will be specific to your host, and will unlikely match this example.
