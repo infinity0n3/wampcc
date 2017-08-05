@@ -1,0 +1,13 @@
+prefix=/mnt/projects/aries_platform/wamp_brainstorming/local2
+exec_prefix=/mnt/projects/aries_platform/wamp_brainstorming/local2
+libdir=/mnt/projects/aries_platform/wamp_brainstorming/local2/lib
+sharedlibdir=/mnt/projects/aries_platform/wamp_brainstorming/local2/lib
+includedir=/mnt/projects/aries_platform/wamp_brainstorming/local2/include
+
+Name: wampcc
+Description: WAMP C++ library
+Version: 1.4
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -luv -lcrypto -lssl -lpthread -lwampcc_json
+Cflags: -I${includedir}

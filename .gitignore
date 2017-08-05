@@ -48,7 +48,6 @@ Makefile.in
 /aclocal.m4
 /compile
 /config.guess
-/config.h.in
 /config.sub
 /configure
 /configure.scan
@@ -67,19 +66,8 @@ Makefile.in
 
 /m4
 
-/src/.deps
-/src/.libs
-/lib/.deps
-/lib/.libs
-
-/test/.deps
-/test/.libs
-/external/apache/.deps
-/external/http_parser/.deps
 
 # Ignore folders of external code that has to be downloaded into source tree
 
-/external/msgpack-c/
-/external/websocketpp/
-/jalson/
+
 
