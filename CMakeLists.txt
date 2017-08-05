@@ -15,6 +15,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 option (BUILD_SHARED_LIBS "Use shared libraries" ON) 
 option (BUILD_STATIC_LIBS "Use static libraries" ON) 
 option (BUILD_EXAMPLES    "Build example apps"   ON) 
+option (BUILD_UTILS       "Build utility apps"   ON)
 option (BUILD_TESTS       "Build test apps"      OFF) 
 
 set(INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin" CACHE PATH "Installation directory for executables")
@@ -26,18 +27,57 @@ set(INSTALL_PKGCONFIG_DIR "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" CACHE PATH "In
 ## Platform checks, and generate config.h
 ##
 include(PlatformCheck)
+include(CheckLibraryExists)
 
 ##
 ## Try to find libuv
 ##
 set(LIBUV_DIR "" CACHE STRING "libuv installation directory")
-find_package(libuv REQUIRED)
+
+if("${LIBUV_DIR}" STREQUAL "")
+  find_package(libuv REQUIRED)
+else() # LIBUV_DIR
+  if(CMAKE_HOST_UNIX)
+      set(LIBUV_FILE "uv")
+  else()
+      set(LIBUV_FILE "libuv")
+  endif()
+  
+  check_library_exists(${LIBUV_FILE} uv_version ${LIBUV_DIR}/lib HAVE_LIBUV)
+  
+  if(NOT HAVE_LIBUV)
+    message(FATAL_ERROR "libuv not found")
+  endif()
+  
+  link_directories(${INSTALL_LIB_DIR} ${LIBUV_DIR}/lib)
+endif() # LIBUV_DIR
 
 ##
 ## Try to find jansson
 ##
 set(JANSSON_DIR "" CACHE STRING "Jansson installation directory")
+
+if("${JANSSON_DIR}" STREQUAL "")
 find_package(jansson REQUIRED)
+else() # JANSSON_DIR
+  if(CMAKE_HOST_UNIX)
+      set(JANSSON_FILE "jansson")
+  else()
+      set(JANSSON_FILE "libjansson")
+  endif()
+  
+  check_library_exists(${JANSSON_FILE} json_object ${JANSSON_DIR}/lib HAVE_JANSSON)
+  
+  if(NOT HAVE_JANSSON)
+    message(FATAL_ERROR "jansson not found")
+  endif()
+  
+  if(NOT "${LIBUV_DIR}" STREQUAL "")
+    link_directories(${INSTALL_LIB_DIR} ${LIBUV_DIR}/lib ${JANSSON_DIR}/lib)
+  else()
+    link_directories(${INSTALL_LIB_DIR} ${JANSSON_DIR}/lib)
+  endif()
+endif() # JANSSON_DIR
 
 # configure a header file to pass some of the CMake settings
 # to the source code
