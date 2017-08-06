@@ -17,6 +17,8 @@ option (BUILD_STATIC_LIBS "Use static libraries" ON)
 option (BUILD_EXAMPLES    "Build example apps"   ON)
 option (BUILD_UTILS       "Build utility apps"   ON)
 option (BUILD_TESTS       "Build test apps"      OFF)
+set(LIBUV_DIR   "" CACHE STRING "libuv installation directory")
+set(JANSSON_DIR "" CACHE STRING "Jansson installation directory")
 
 set(INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin" CACHE PATH "Installation directory for executables")
 set(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib" CACHE PATH  "Installation directory for libraries")
@@ -31,13 +33,22 @@ include(CheckLibraryExists)
 find_package(PkgConfig)
 
 ##
+## Try to find libssl
+##
+pkg_check_modules(SSL openssl REQUIRED)
+if(SSL_FOUND)
+  set(HAVE_SSL ON)
+endif()
+  
+##
 ## Try to find libuv
 ##
-set(LIBUV_DIR "" CACHE STRING "libuv installation directory")
 
 if("${LIBUV_DIR}" STREQUAL "")
-pkg_check_modules(HAVE_LIBUV libuv>=1.8.0 REQUIRED)
-
+  pkg_check_modules(LIBUV libuv>=1.8.0 REQUIRED)
+  if(LIBUV_FOUND)
+    set(HAVE_LIBUV ON)
+  endif()
 else() # LIBUV_DIR
   if(CMAKE_HOST_UNIX)
       set(LIBUV_FILE "uv")
@@ -57,10 +68,12 @@ endif() # LIBUV_DIR
 ##
 ## Try to find jansson
 ##
-set(JANSSON_DIR "" CACHE STRING "Jansson installation directory")
 
 if("${JANSSON_DIR}" STREQUAL "")
-pkg_check_modules(HAVE_JANSSON jansson>=2.7 REQUIRED)
+  pkg_check_modules(JANSSON jansson>=2.7 REQUIRED)
+  if(JANSSON_FOUND)
+    set(HAVE_JANSSON ON)
+  endif()
 else() # JANSSON_DIR
   if(CMAKE_HOST_UNIX)
       set(JANSSON_FILE "jansson")
@@ -84,7 +97,7 @@ endif() # JANSSON_DIR
 # configure a header file to pass some of the CMake settings
 # to the source code
 configure_file (
-  "${PROJECT_SOURCE_DIR}/config.h.in"
+  "${PROJECT_SOURCE_DIR}/cmake/config.h.incmake"
   "${PROJECT_BINARY_DIR}/config.h"
   )
 

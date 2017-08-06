@@ -48,6 +48,7 @@ Makefile.in
 /aclocal.m4
 /compile
 /config.guess
+/config.h.in
 /config.sub
 /configure
 /configure.scan
@@ -66,10 +67,19 @@ Makefile.in
 
 /m4
 
+/utility/.deps
+/utility/.libs
+/library/.deps
+/library/.libs
 
-# Ignore folders of external code that has to be downloaded into source tree
+/test/.deps
+/test/.libs
+/3rdparty/apache/.deps
+/3rdparty/http_parser/.deps
 
-# build directory
+# Ignore build directory
+
 /build
+
 
 

@@ -62,10 +62,10 @@
 #define PACKAGE_NAME "wampcc"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "wampcc 1.4"
+#define PACKAGE_STRING "wampcc @WAMPCC_VERSION@"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "1.4"
+#define PACKAGE_VERSION "@WAMPCC_VERSION@"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "wampcc"
@@ -74,6 +74,9 @@
 #define PACKAGE_URL "  "
 
 /* Define to 1 if libjansson library is present */
-#define HAVE_JANSSON 1
+#cmakedefine HAVE_JANSSON 1
+
+/* Define to 1 if libssl library is present */
+#cmakedefine HAVE_SSL 1
 
 #endif /* WAMPCC_CONFIG_H */
