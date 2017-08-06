@@ -71,11 +71,17 @@ Makefile.in
 /utility/.libs
 /library/.deps
 /library/.libs
+/library/json/.deps
+/library/json/.libs
+/library/wampcc/.deps
+/library/wampcc/.libs
 
 /test/.deps
 /test/.libs
 /3rdparty/apache/.deps
 /3rdparty/http_parser/.deps
+
+/library/3rdparty
 
 # Ignore build directory
 

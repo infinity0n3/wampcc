@@ -19,10 +19,11 @@
 #
 # NOTE: it is not good practice to add "-Wall" and "-03" etc here.  Those
 # choices should be made by the user when they invoke the configure script.
-AM_CXXFLAGS =  -I$(top_srcdir)/external/msgpack-c/include -std=c++11 -Wall $(janssoninc)
+AM_CXXFLAGS =  -I$(top_srcdir)/3rdparty/msgpack-c/include -I$(top_srcdir)/include \
+	-std=c++11 -Wall \
+	$(JANSSEN_CFLAGS)
 
-
-AM_LDFLAGS=-pthread
+AM_LDFLAGS = -pthread $(JANSSEN_LIBS)
 
 # Primary defination of our shared library to be created.  Notice the
 # _LTLIBRARIES key: automake is looking specifically for this pattern and then
@@ -35,7 +36,7 @@ lib_LTLIBRARIES = libwampcc_json.la
 
 # The "include_" prefix includes a list of headers to be installed.  The
 # "nobase_" additional prefix means the directory names are copied too.
-nobase_include_HEADERS = wampcc/json.h wampcc/json_internals.h
+#nobase_include_HEADERS = $(top_srcdir)/include/wampcc/json.h $(top_srcdir)include/wampcc/json_internals.h
 
 
 # List the sources for an individual library
