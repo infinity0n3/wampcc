@@ -12,11 +12,11 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 ##
 ## Build options
 ##
-option (BUILD_SHARED_LIBS "Use shared libraries" ON) 
-option (BUILD_STATIC_LIBS "Use static libraries" ON) 
-option (BUILD_EXAMPLES    "Build example apps"   ON) 
+option (BUILD_SHARED_LIBS "Use shared libraries" ON)
+option (BUILD_STATIC_LIBS "Use static libraries" ON)
+option (BUILD_EXAMPLES    "Build example apps"   ON)
 option (BUILD_UTILS       "Build utility apps"   ON)
-option (BUILD_TESTS       "Build test apps"      OFF) 
+option (BUILD_TESTS       "Build test apps"      OFF)
 
 set(INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin" CACHE PATH "Installation directory for executables")
 set(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib" CACHE PATH  "Installation directory for libraries")
@@ -28,6 +28,7 @@ set(INSTALL_PKGCONFIG_DIR "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" CACHE PATH "In
 ##
 include(PlatformCheck)
 include(CheckLibraryExists)
+find_package(PkgConfig)
 
 ##
 ## Try to find libuv
@@ -35,7 +36,8 @@ include(CheckLibraryExists)
 set(LIBUV_DIR "" CACHE STRING "libuv installation directory")
 
 if("${LIBUV_DIR}" STREQUAL "")
-  find_package(libuv REQUIRED)
+pkg_check_modules(HAVE_LIBUV libuv>=1.8.0 REQUIRED)
+
 else() # LIBUV_DIR
   if(CMAKE_HOST_UNIX)
       set(LIBUV_FILE "uv")
@@ -58,7 +60,7 @@ endif() # LIBUV_DIR
 set(JANSSON_DIR "" CACHE STRING "Jansson installation directory")
 
 if("${JANSSON_DIR}" STREQUAL "")
-find_package(jansson REQUIRED)
+pkg_check_modules(HAVE_JANSSON jansson>=2.7 REQUIRED)
 else() # JANSSON_DIR
   if(CMAKE_HOST_UNIX)
       set(JANSSON_FILE "jansson")

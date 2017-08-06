@@ -1,5 +1,5 @@
 find_package(PkgConfig)
-pkg_check_modules(PC_LIBUV QUIET libuv)
+pkg_check_modules(PC_LIBUV libuv)
 set(LIBUV_DEFINITIONS ${PC_LIBUV_CFLAGS_OTHER})
 
 find_path(LIBUV_INCLUDE_DIR uv.h
@@ -21,7 +21,7 @@ set(LIBUV_LIBRARIES ${LIBUV_LIBRARY} )
 set(LIBUV_INCLUDE_DIRS ${LIBUV_INCLUDE_DIR} )
 
 if(LIBUV_FOUND)
-set(HAVE_LIBUV ON )
-message(STATUS "libuv version: ${PC_LIBUV_VERSION}")
-message(STATUS "libuv include: ${LIBUV_INCLUDE_DIR}")
+  set(HAVE_LIBUV ON )
+  #~ message(STATUS "libuv version: ${PC_LIBUV_VERSION}")
+  #~ message(STATUS "libuv include: ${LIBUV_INCLUDE_DIR}")
 endif()

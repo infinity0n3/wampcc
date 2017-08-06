@@ -1,5 +1,5 @@
 find_package(PkgConfig)
-pkg_check_modules(PC_JANSSON QUIET jansson)
+pkg_check_modules(PC_JANSSON jansson>=2.7)
 set(JANSSON_DEFINITIONS ${PC_JANSSON_CFLAGS_OTHER})
 
 find_path(JANSSON_INCLUDE_DIR jansson.h
@@ -22,6 +22,6 @@ set(JANSSON_INCLUDE_DIRS ${JANSSON_INCLUDE_DIR} )
 
 if(LIBJANSSON_FOUND)
 set(HAVE_JANSSON ON )
-message(STATUS "jansson version: ${PC_JANSSON_VERSION}")
-message(STATUS "jansson include: ${JANSSON_INCLUDE_DIR}")
+#~ message(STATUS "jansson version: ${PC_JANSSON_VERSION}")
+#~ message(STATUS "jansson include: ${JANSSON_INCLUDE_DIR}")
 endif()
