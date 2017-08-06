@@ -188,11 +188,13 @@ The latest version of *wampcc* can be downloaded from github using:
 
 ```bash
 git clone https://github.com/darrenjs/wampcc.git
+git submodule init
+git submodule update
 ```
 
 This will fetch the source files directly from github and place them in a directory named `wampcc/`.
 
-Assuming no download problems the additional files can be found in the `jalson/` sub-directory.
+Assuming no download problems 3rd-party source codes should be also downloaded and be in `3rdparty/` sub-directory.
 
 **Source configuration**
 
