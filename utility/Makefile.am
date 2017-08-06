@@ -10,12 +10,16 @@
 #
 # NOTE: it is not good practice to add "-Wall" and "-03" etc here.  Those
 # choices should be made by the user when they invoke the configure script.
-AM_CPPFLAGS =   -I$(jalsoninc) $(libuvinc) -I$(top_srcdir)/lib  -Wall -g3 -ggdb -std=c++11 -O0
+AM_CPPFLAGS = -Wall -g3 -ggdb -std=c++11 -O0 \
+	-I$(top_srcdir)/include \
+	$(JANSSON_CFLAGS) \
+	$(LIBUV_CFLAGS) \
+	$(OPENSSL_CFLAGS)
 
-AM_LDFLAGS=-lpthread
+AM_LDFLAGS = -lpthread $(JANSSON_LIBS) $(LIBUV_LIBS) $(OPENSSL_LIBS)
 
 bin_PROGRAMS = admin
 
 admin_SOURCES=admin.cc
-admin_LDADD=-L../lib -lwampcc  $(LIBLS) -L$(jalsonlib) -lwampcc_json  $(libuvlib)  -lcrypto -lpthread
-admin_LDFLAGS=-L../lib -pthread
+admin_LDADD=-lwampcc -lwampcc_json 
+admin_LDFLAGS=-L../library/wampcc -L../library/json

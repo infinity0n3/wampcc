@@ -7,4 +7,4 @@
 ACLOCAL_AMFLAGS = -I m4
 
 #~ SUBDIRS = library utility tests examples
-SUBDIRS = library utility
+SUBDIRS = library utility include examples

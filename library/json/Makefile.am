@@ -19,11 +19,12 @@
 #
 # NOTE: it is not good practice to add "-Wall" and "-03" etc here.  Those
 # choices should be made by the user when they invoke the configure script.
-AM_CXXFLAGS =  -I$(top_srcdir)/3rdparty/msgpack-c/include -I$(top_srcdir)/include \
-	-std=c++11 -Wall \
-	$(JANSSEN_CFLAGS)
+AM_CXXFLAGS =  -std=c++11 -Wall \
+	-I$(top_srcdir)/include \
+	-I$(top_srcdir)/3rdparty/msgpack-c/include \
+	$(JANSSON_CFLAGS)
 
-AM_LDFLAGS = -pthread $(JANSSEN_LIBS)
+AM_LDFLAGS = -pthread $(JANSSON_LIBS)
 
 # Primary defination of our shared library to be created.  Notice the
 # _LTLIBRARIES key: automake is looking specifically for this pattern and then
@@ -41,7 +42,7 @@ lib_LTLIBRARIES = libwampcc_json.la
 
 # List the sources for an individual library
 libwampcc_json_la_SOURCES=json_pointer.cc jalson.cc vendors.cc msgpack_serialiser.cc
-libwampcc_json_la_LIBADD=$(janssonlib)
+libwampcc_json_la_LIBADD=$(JANSSON_LIBS)
 
 # Include compile and link flags for an individual library.
 #

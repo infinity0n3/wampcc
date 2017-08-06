@@ -103,10 +103,10 @@ configure_file (
 
 # pkg-config
 configure_file( 
-  "${CMAKE_CURRENT_SOURCE_DIR}/wampcc.pc.in"
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/wampcc.pc.incmake"
   "${CMAKE_CURRENT_BINARY_DIR}/wampcc.pc" @ONLY)
 configure_file( 
-  "${CMAKE_CURRENT_SOURCE_DIR}/wampcc_json.pc.in"
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/wampcc_json.pc.incmake"
   "${CMAKE_CURRENT_BINARY_DIR}/wampcc_json.pc" @ONLY)
 
 

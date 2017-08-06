@@ -81,7 +81,19 @@ Makefile.in
 /3rdparty/apache/.deps
 /3rdparty/http_parser/.deps
 
-/library/3rdparty
+
+/3rdparty/apache/.dirstamp
+/3rdparty/http_parser/.dirstamp
+/configure.ac.backup
+/examples/basic/.deps/
+/examples/basic/.dirstamp
+/examples/ssl_socket/.deps/
+/examples/ssl_socket/.dirstamp
+/examples/tester/.deps/
+/examples/tester/.dirstamp
+/examples/wamp_router/.deps/
+/examples/wamp_router/.dirstamp
+/tests/.deps/
 
 # Ignore build directory
 

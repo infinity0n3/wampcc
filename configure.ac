@@ -39,109 +39,35 @@ m4_ifdef([AX_CXX_COMPILE_STDCXX_11], [
 
 
 #========== Check for third party libraries ==========
+#============ openssl ===========
+PKG_CHECK_MODULES([OPENSSL], [openssl >= 1.0])
+
+#============= libuv ===========
+AC_ARG_WITH(libuv, [  --with-libuv=PATH specify directory containing installation of libuv])
+if test "x$with_libuv" != x; then
+    LIBUV_CFLAGS="-I$with_libuv/include"
+    LIBUV_LIBS="-luv"
+    #~ # TODO: library sanity check
+    AC_MSG_NOTICE([notice libuv-root: ${with_libuv}])
+else
+    PKG_CHECK_MODULES([LIBUV], [libuv >= 1.8.0])
+fi
+AC_DEFINE_UNQUOTED([HAVE_LIBUV], [1], [Define to 1 if Jannson library is present])
+
+#============= jansson =========
+AC_ARG_WITH(jansson, [  --with-jansson=PATH specify directory for the installed JANSSON library])
+if test "x$with_jansson" != x; then
+    JANSSON_CFLAGS="-I$with_jansson/include"
+    JANSSON_LIBS="-ljansson"
+    # TODO: library sanity check
+else
+    PKG_CHECK_MODULES([JANSSON], [jansson >= 2.7])
+fi
+AC_DEFINE_UNQUOTED([HAVE_JANSSON], [1], [Define to 1 if Jannson library is present])
 
 #========== Checks for header files ==========
-
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stdlib.h string.h strings.h unistd.h getopt.h])
-
-AC_CHECK_HEADER(openssl/ssl.h, [openssl_ssl=1], [openssl_ssl=0])
-if test "x$openssl_ssl" = "x0" ; then
-    AC_MSG_ERROR([system header not found: openssl/ssl.h - please check the openssl dev package in installed on your system ])
-fi
-
-AC_CHECK_HEADER(openssl/hmac.h, [openssl_hmac=1], [openssl_hmac=0])
-if test "x$openssl_hmac" = "x0" ; then
-    AC_MSG_ERROR([system header not found: openssl/hmac.h - please check the openssl dev package in installed on your system ])
-fi
-
-AC_HEADER_STDBOOL
-AC_C_CONST
-AC_C_INLINE
-
-# The user provided 'srcdir' might be a relative or an absolute path, depending
-# on how the configure script was invoked. Here we obtain the absolute path to
-# the srcdir.
-wampcc_src_dir=`(cd "$srcdir"; pwd)`
-
-# log some directories known to configure
-AC_MSG_NOTICE([notice srcdir: ${srcdir}])
-AC_MSG_NOTICE([notice prefix: ${prefix}])
-AC_MSG_NOTICE([notice ac_pwd: ${ac_pwd}])
-AC_MSG_NOTICE([notice wampcc_src_dir: ${wampcc_src_dir}])
-
-# libuv is required by the project for network IO. Thus the user must provide
-# the installed location during configuration.
-
-have_libuv=0
-
-AC_ARG_WITH(libuv, [  --with-libuv=PATH specify directory containing installation of libuv])
-
-if test "x$with_libuv" != x; then
-   libuvlib="-L$with_libuv/lib -luv"
-   libuvinc="-I$with_libuv/include"
-   have_libuv=1
-else
-   PKG_CHECK_MODULES([LIBUV], [libuv >= 1.8.0])
-   have_libuv=1
-fi
-
-# put the inc and lib into the makefiles
-AC_SUBST(libuvlib)
-AC_SUBST(libuvinc)
-
-# put variable into config.h
-AC_DEFINE_UNQUOTED([HAVE_LIBUV], [$have_libuv], [Define to 1 if libuv library is present])
-
-
-if test "x$have_libuv" = "x0" ; then
-    AC_MSG_ERROR([You have not configured location of libuv. Try --help.])
-fi
-
-#========== json library, for wampcc_json ==========
-
-# wampcc_json is wrapper around jansson, so detect if we have been told where to
-# find jansson.
-#
-
-have_vendor=0
-
-# Specify a location for Jansson
-AC_ARG_WITH(jansson, [ --with-jansson=PATH specify directory for the installed JANSSON library])
-
-have_jansson=0
-if test "x$with_jansson" != x; then
-   janssonlib="$with_jansson/lib/libjansson.la"
-   janssoninc="-I$with_jansson/include"
-   have_jansson=1
-   have_vendor=1
-else
-   PKG_CHECK_MODULES([JANSSON], [jansson >= 2.7]) 
-   have_jansson=1
-   have_vendor=1
-fi
-
-if test "x$have_vendor" = "x0" ; then
-    AC_MSG_ERROR([You have not configured a JSON implementation. Try --help. Supported vendors: jansson])
-fi
-
-# put the inc and lib into the makefiles
-AC_SUBST(janssonlib)
-AC_SUBST(janssoninc)
-
-# put variable into config.h
-AC_DEFINE_UNQUOTED([HAVE_JANSSON], [$have_jansson], [Define to 1 if Jannson library is present])
-
-## Tell libwampcc where to find wampcc_json. Normally wampcc_json is under the
-## json/ dir, but historically it was possible to pull it in from another
-## location
-
-AC_MSG_NOTICE([Using bundled jalson])
-internal_jalson=1
-jalsoninc="$(cd "$srcdir"; pwd)/library/json"
-jalsonlib="../library/json"
-AC_SUBST(jalsoninc)
-AC_SUBST(jalsonlib)
 
 ##########################################################################
 # optional support for the admin static target
@@ -156,10 +82,6 @@ AC_ARG_ENABLE([adminstatic],
 AC_MSG_RESULT([$enable_adminstatic])
 AM_CONDITIONAL([USE_ADMINSTATIC], [test x"$enable_adminstatic" = x"yes" ])
 
-##########################################################################
-
-
-
 #========== Generation ==========
 
 # List the files that will be generated. These are mainly makefiles, which
@@ -170,12 +92,10 @@ utility/Makefile
 library/Makefile
 library/json/Makefile
 library/wampcc/Makefile
+include/Makefile
+examples/Makefile
+tests/Makefile
 ])
-
-#~ tests/Makefile
-#~ examples/Makefile
-
-#~ AC_CONFIG_SUBDIRS([jalson])
 
 # Trigger the generation of our makefiles
 AC_OUTPUT
